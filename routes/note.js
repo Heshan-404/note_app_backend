@@ -7,17 +7,23 @@ const router = express.Router();
 router.post("/:userId/notes", async (req, res) => {
   try {
     const { userId } = req.params;
-    const { title, content } = req.body;
+    const { note_id, title, content } = req.body;
 
     const user = await User.findOne({ user_id: userId });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const newNote = { title, content, timestamp: new Date() };
-    user.notes.push(newNote);
+    const newNote = {
+      note_id, // This note_id should be passed from the request body
+      title,
+      content,
+      timestamp: new Date(),
+    };
 
+    user.notes.push(newNote);
     await user.save();
+
     res.status(201).json({ message: "Note saved successfully", note: newNote });
   } catch (error) {
     console.error("Error saving note:", error);
@@ -52,7 +58,7 @@ router.get("/:userId/notes/:noteId", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const note = user.notes.id(noteId);
+    const note = user.notes.find((note) => note.note_id === noteId);
     if (!note) {
       return res.status(404).json({ message: "Note not found" });
     }
