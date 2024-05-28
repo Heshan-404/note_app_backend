@@ -9,19 +9,18 @@ router.post("/:userId/notes", async (req, res) => {
     const { userId } = req.params;
     const { note_id, title, content } = req.body;
 
-    const user = await User.findOne({ user_id: userId });
+    let user = await User.findOne({ user_id: userId });
+
     if (!user) {
-      if (!user) {
-        // If user does not exist, create a new user
-        user = new User({
-          user_id: userId,
-          notes: [],
-        });
-      }
+      // If user does not exist, create a new user
+      user = new User({
+        user_id: userId,
+        notes: [],
+      });
     }
 
     const newNote = {
-      note_id, // This note_id should be passed from the request body
+      note_id, // Ensure note_id is passed from the request body and is unique
       title,
       content,
       timestamp: new Date(),
