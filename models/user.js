@@ -1,8 +1,14 @@
 import mongoose from "mongoose";
-import NoteSchema from "./note";
+
 const UserSchema = new mongoose.Schema({
-  user_id: { type: String, unique: true, required: true },
-  notes: [NoteSchema],
+  user_id: { type: String, required: true, unique: true },
+  notes: [
+    {
+      title: String,
+      content: String,
+      timestamp: { type: Date, default: Date.now },
+    },
+  ],
 });
 
 const User = mongoose.model("User", UserSchema);
