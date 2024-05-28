@@ -33,6 +33,22 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/:userId/notes", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const user = await User.findOne({ user_id: userId });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user.notes);
+  } catch (error) {
+    console.error("Error fetching notes:", error);
+    res.status(500).json({ message: "Error fetching notes" });
+  }
+});
+
 // Start Server
 app.listen(port, () =>
   console.log(`Server listening at http://localhost:${port}`)
