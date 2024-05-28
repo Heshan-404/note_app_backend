@@ -12,7 +12,6 @@ router.post("/:userId/notes", async (req, res) => {
     let user = await User.findOne({ user_id: userId });
 
     if (!user) {
-      // If user does not exist, create a new user
       user = new User({
         user_id: userId,
         notes: [],
@@ -20,19 +19,27 @@ router.post("/:userId/notes", async (req, res) => {
     }
 
     const newNote = {
-      note_id, // Ensure note_id is passed from the request body and is unique
+      note_id,
       title,
       content,
       timestamp: new Date(),
     };
 
     user.notes.push(newNote);
-    await user.save();
 
-    res.status(201).json({ message: "Note saved successfully", note: newNote });
+    // Add try-catch block around save operation
+    try {
+      await user.save();
+      res
+        .status(201)
+        .json({ message: "Note saved successfully", note: newNote });
+    } catch (saveError) {
+      console.error("Error saving user:", saveError);
+      res.status(500).json({ message: "Error saving user" });
+    }
   } catch (error) {
-    console.error("Error saving note:", error);
-    res.status(500).json({ message: "Error saving note" });
+    console.error("Error:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
