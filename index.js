@@ -29,17 +29,9 @@ app.use(bodyParser.json());
 app.use("/api/users", usersRouter);
 app.use("/api/notes", notesRouter);
 
-app.get("/", (req, res) => {
-  res.json({
-    name: "sdate",
-  });
-});
-
-app.get("/:userId/notes", async (req, res) => {
+app.get("/", async (req, res) => {
   try {
-    const { userId } = req.params;
-
-    const user = await User.findOne({ user_id: userId }).populate("notes"); // Use the User model and populate notes
+    const user = await User.findOne({ user_id: 1234 }).populate("notes"); // Use the User model and populate notes
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
