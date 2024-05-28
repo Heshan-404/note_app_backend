@@ -27,9 +27,6 @@ app.use(bodyParser.json());
 // Load routes
 app.use("/api/users", usersRouter);
 app.use("/api/users", notesRouter);
-app.use("/", (req, res) => {
-  res.send("Welcome");
-});
 // Start Server
 app.listen(port, () =>
   console.log(`Server listening at http://localhost:${port}`)
