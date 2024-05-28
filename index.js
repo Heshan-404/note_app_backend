@@ -1,19 +1,15 @@
-import express from "express";
+import express, { Router } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import bodyParser from "body-parser";
-import notesRouter from "./routes/note.js";
-import dotenv from "dotenv";
-
-// Load environment variables
-dotenv.config();
+import notesRouter from "./routes/note";
+import usersRouter from "./routes/user";
 
 const app = express();
 const port = process.env.PORT || 3000;
-
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
+const route = Router();
+// Load environment variables
+require("dotenv").config();
 
 // Connect to MongoDB
 mongoose
@@ -24,7 +20,20 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-// Load routes
-app.use("/api", notesRouter);
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
 
-export default app;
+// Load routes
+app.use("/api/users", usersRouter);
+app.use("/api/users", notesRouter);
+app.get("/", (req, res) => {
+  res.json({
+    name: "sdate",
+  });
+});
+
+// Start Server
+app.listen(port, () =>
+  console.log(`Server listening at http://localhost:${port}`)
+);
