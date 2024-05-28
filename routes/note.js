@@ -11,7 +11,13 @@ router.post("/:userId/notes", async (req, res) => {
 
     const user = await User.findOne({ user_id: userId });
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      if (!user) {
+        // If user does not exist, create a new user
+        user = new User({
+          user_id: userId,
+          notes: [],
+        });
+      }
     }
 
     const newNote = {
