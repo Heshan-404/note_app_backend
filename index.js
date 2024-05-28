@@ -1,15 +1,15 @@
-// app.js
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import bodyParser from "body-parser";
-import notesRouter from "./routes/note"; // Import from notes.js
+import notesRouter from "./routes/note";
+import usersRouter from "./routes/user";
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Load environment variables
-require("dotenv").config({ path: ".env" });
+require("dotenv").config();
 
 // Connect to MongoDB
 mongoose
@@ -25,7 +25,8 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Load routes
-app.use("/api/notes", notesRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/users", notesRouter);
 
 // Start Server
 app.listen(port, () =>

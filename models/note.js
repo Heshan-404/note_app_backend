@@ -1,11 +1,9 @@
 const mongoose = require("mongoose");
 
 const NoteSchema = new mongoose.Schema({
-  title: String,
-  content: String,
-  timestamp: { type: Date, default: Date.now }, // Use Date.now for automatic timestamp
+  title: { type: String, required: true },
+  content: { type: String, required: true },
+  timestamp: { type: Date, default: Date.now },
 });
 
-const Note = mongoose.model("Note", NoteSchema);
-
-module.exports = Note;
+module.exports = NoteSchema;
