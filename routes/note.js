@@ -18,13 +18,7 @@ router.post("/", async (req, res) => {
 
 // Get All Notes Route
 router.get("/", async (req, res) => {
-  try {
-    const notes = await Note.find();
-    res.json(notes);
-  } catch (error) {
-    console.error("Error fetching notes:", error);
-    res.status(500).json({ message: "Error fetching notes" });
-  }
+  res.send("Note");
 });
 
 export default router;
