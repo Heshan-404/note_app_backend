@@ -7,7 +7,7 @@ const router = express.Router();
 router.post("/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
-    const { title, content, note_id } = req.body;
+    const { title, content, note_id, timestamp } = req.body;
 
     const note = new Note({
       user_id: userId,
@@ -24,13 +24,13 @@ router.post("/:userId", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
-// Get all notes of a user by user_id
+// Get all notes of a user by user_id, sorted by latest date first
 router.get("/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
 
-    const notes = await Note.find({ user_id: userId });
+    const notes = await Note.find({ user_id: userId }).sort({ timestamp: -1 }); // Sort by latest date first
+
     if (notes.length === 0) {
       return res.status(404).json({ message: "Notes not found for this user" });
     }
@@ -38,6 +38,23 @@ router.get("/:userId", async (req, res) => {
     res.json(notes);
   } catch (error) {
     console.error("Error fetching notes:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Get note details by note_id
+router.get("/:userId/:noteId", async (req, res) => {
+  try {
+    const { userId, noteId } = req.params;
+
+    const note = await Note.findOne({ user_id: userId, note_id: noteId });
+    if (!note) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+
+    res.json(note);
+  } catch (error) {
+    console.error("Error fetching note:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
