@@ -86,7 +86,7 @@ router.get("/:userId/notes/:noteId", async (req, res) => {
       console.log(`Note with id: ${noteId} not found`);
       return res.status(404).json({ message: "Note not found" });
     }
-
+    res.json({ abc: "abcd" });
     res.json(note);
   } catch (error) {
     console.error("Error fetching note:", error);
