@@ -5,7 +5,6 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import notesRouter from "./routes/note";
 import usersRouter from "./routes/user";
-import User from "./models/user"; // Import the User model
 
 dotenv.config();
 
@@ -29,13 +28,25 @@ app.use(bodyParser.json());
 app.use("/api/users", usersRouter);
 app.use("/api/notes", notesRouter);
 
-app.get("/", async (req, res) => {
+app.get("/", (req, res) => {
+  res.json({
+    name: "sdate",
+  });
+});
+
+app.get("/:userId/notes", async (req, res) => {
   try {
-    const user = await User.findOne({ user_id: 1234 }).populate("notes"); // Use the User model and populate notes
+    const { userId } = req.params;
+
+    // Directly access the MongoDB collection
+    const db = mongoose.connection;
+    const usersCollection = db.collection("users");
+
+    const user = await usersCollection.findOne({ user_id: userId });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.json(user);
+    res.json(user.notes);
   } catch (error) {
     console.error("Error fetching notes:", error);
     res.status(500).json({ message: "Error fetching notes" });
