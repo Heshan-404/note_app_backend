@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Router } from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import bodyParser from "body-parser";
@@ -7,7 +7,7 @@ import usersRouter from "./routes/user";
 
 const app = express();
 const port = process.env.PORT || 3000;
-
+const route = Router();
 // Load environment variables
 require("dotenv").config();
 
@@ -27,7 +27,9 @@ app.use(bodyParser.json());
 // Load routes
 app.use("/api/users", usersRouter);
 app.use("/api/users", notesRouter);
-
+app.use("/", (req, res) => {
+  res.send("Welcome");
+});
 // Start Server
 app.listen(port, () =>
   console.log(`Server listening at http://localhost:${port}`)
