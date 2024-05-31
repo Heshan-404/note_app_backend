@@ -80,7 +80,7 @@ router.delete("/:userId/:noteId", async (req, res) => {
   }
 });
 
-router.get("/:userId/count", async (req, res) => {
+router.get("/count/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
 
