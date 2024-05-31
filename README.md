@@ -1,4 +1,4 @@
-```markdown
+
 # Note App
 
 This repository contains the complete code for the Note App, a mobile application for creating, editing, and managing personal notes. The project includes both the Android Studio frontend and the Node.js backend.
