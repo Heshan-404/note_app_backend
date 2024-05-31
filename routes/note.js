@@ -25,6 +25,29 @@ router.post("/:userId", async (req, res) => {
   }
 });
 
+// Update Note Route
+router.put("/:userId/:noteId", async (req, res) => {
+  try {
+    const { userId, noteId } = req.params;
+    const { title, content, timestamp } = req.body;
+
+    const note = await Note.findOneAndUpdate(
+      { user_id: userId, note_id: noteId },
+      { title, content, timestamp },
+      { new: true }
+    );
+
+    if (!note) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+
+    res.json({ message: "Note updated successfully", note });
+  } catch (error) {
+    console.error("Error updating note:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 // Get all notes of a user by user_id, sorted by latest date first
 router.get("/:userId", async (req, res) => {
   try {
