@@ -44,18 +44,15 @@ router.get("/:userId", async (req, res) => {
 });
 
 // Get note details by note_id
-router.get("/:userId/:noteId", async (req, res) => {
+router.get("/count/:userId", async (req, res) => {
   try {
-    const { userId, noteId } = req.params;
+    const { userId } = req.params;
 
-    const note = await Note.findOne({ user_id: userId, note_id: noteId });
-    if (!note) {
-      return res.status(404).json({ message: "Note not found" });
-    }
+    const count = await Note.countDocuments({ user_id: userId });
 
-    res.json(note);
+    res.json({ noteCount: count });
   } catch (error) {
-    console.error("Error fetching note:", error);
+    console.error("Error getting note count:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
@@ -80,16 +77,4 @@ router.delete("/:userId/:noteId", async (req, res) => {
   }
 });
 
-router.get("/count/:userId", async (req, res) => {
-  try {
-    const { userId } = req.params;
-
-    const count = await Note.countDocuments({ user_id: userId });
-
-    res.json({ noteCount: count });
-  } catch (error) {
-    console.error("Error getting note count:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
 export default router;
