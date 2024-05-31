@@ -80,4 +80,16 @@ router.delete("/:userId/:noteId", async (req, res) => {
   }
 });
 
+router.get("/:userId/count", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const count = await Note.countDocuments({ user_id: userId });
+
+    res.json({ noteCount: count });
+  } catch (error) {
+    console.error("Error getting note count:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 export default router;
